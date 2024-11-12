@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class Time</title>
+    <script src="script.js" defer></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+      .progress-bar {
+        width: 80%;
+        background-color: #f3f3f3;
+        border-radius: 25px;
+        margin: 20px auto;
+        overflow: hidden;
+      }
+      .progress-bar-inner {
+        height: 30px;
+        width: 0;
+        background-color: #4caf50;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        border-radius: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Actuellement : <span id="currentClass"></span></h1>
+    <h2>Temps Restant :</h2>
+    <div id="time-remaining">00:00:00</div>
+    <h2>Prochain événement : <span id="event"></span></h2>
+    <div class="progress-bar">
+      <div class="progress-bar-inner" id="progress-bar-inner">0%</div>
+    </div>
+  </body>
+</html>

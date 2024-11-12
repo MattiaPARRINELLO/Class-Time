@@ -1,0 +1,43 @@
+{
+  "lundi": {
+    "8:30 - 10:20": "Pas cours",
+    "10:20 - 10:40": "Pause",
+    "10:40 - 11:35": "Enseignement scientifique - NEGRONI",
+    "11:35 - 12:30": "Enseignement scientifique - MSELLAK",
+    "12:30 - 13:30": "Pause déjeuner",
+    "13:30 - 14:25": "Anglais LV1 - ZIMMERMANN",
+    "14:25 - 15:20": "Mathématiques - MIGOT",
+    "15:20 - 15:35": "Pause",
+    "15:35 - 16:30": "Mathématiques - MIGOT"
+  },
+  "mardi": {
+    "8:30 - 10:20": "Mathématiques - MIGOT",
+    "10:20 - 10:40": "Pause",
+    "10:40 - 12:30": "Philosophie - DRECQ",
+    "12:30 - 13:30": "Pause déjeuner",
+    "13:30 - 14:25": "Anglais LV1 - ZIMMERMANN",
+    "14:25 - 15:20": "Espagnol LV2 - BARREIRO",
+    "15:20 - 15:35": "Pause",
+    "15:35 - 17:00": "Sport - GIROTTO"
+  },
+  "mercredi": {
+    "8:00 - 11:35": "Numérique et sciences informatiques - HAMIZI",
+    "11:35 - 13:30": "Pause déjeuner",
+    "13:30 - 14:25": "Anglais LV1 - ZIMMERMANN",
+    "14:25 - 15:20": "Histoire-géographie - PRUNIER",
+    "15:35 - 17:00": "Philosophie - DRECQ"
+  },
+  "jeudi": {
+    "8:00 - 11:35": "Numérique et sciences informatiques - HAMIZI",
+    "11:35 - 12:30": "Enseignement moral et civique - PRUNIER ou Philosophie - DRECQ",
+    "12:30 - 13:30": "Pause déjeuner",
+    "13:30 - 14:25": "Accompagnement orientation - PAINEAU / PRÉVOT"
+  },
+  "vendredi": {
+    "8:30 - 10:20": "Histoire-géographie - PRUNIER",
+    "10:20 - 10:40": "Pause",
+    "10:40 - 12:30": "Mathématiques - MIGOT",
+    "12:30 - 13:30": "Pause déjeuner",
+    "13:30 - 14:25": "Espagnol LV2 - BARREIRO"
+  }
+}
