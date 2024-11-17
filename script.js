@@ -1,43 +1,43 @@
+let data = []
+readJSON().then((json) => {
+    data = json;
+});
+async function readJSON() {
+    let response = await fetch('./edt copy.json');
+    let json = await response.json();
+    return json;
+}
+
 function getCurrentDate() {
     let day = new Date().getDate();
     let weekday = new Date().getDay();
     let hour = new Date().getHours();
     let minute = new Date().getMinutes();
     let second = new Date().getSeconds();
-    // return {
-    //     day: 22,
-    //     weekday: 5,
-    //     hour: 11,
-    //     minute: 0,
-    //     second: 0
-    // }
+    let miliseconds = new Date().getMilliseconds();
     return {
         day: day,
         weekday: weekday,
         hour: hour,
         minute: minute,
-        second: second
+        second: second,
+        miliseconds: miliseconds
     }
 }
 
-async function readJSON() {
-    let response = await fetch('./edt.json');
-    let json = await response.json();
-    return json;
-}
+
 function isThereClass() {
     let currentDate = getCurrentDate();
-    return !(currentDate.hour < 8 || currentDate.hour > 18 || currentDate.weekday == 6 || currentDate.weekday == 7);
+    return !(currentDate.hour < 8 || currentDate.hour > 18 || currentDate.weekday == 6 || currentDate.weekday == 0);
 }
-
 function getWeekdayName(weekday) {
     let weekdayName = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
-    console.log("test");
     return weekdayName[weekday - 1];
 }
+
 async function getNextClass() {
     let currentDate = getCurrentDate();
-    let json = await readJSON();
+    let json = data
 
     if (!isThereClass()) {
         return {
@@ -45,140 +45,132 @@ async function getNextClass() {
             nextClassTime: false
         }
     }
-
     let todayEdt = json[getWeekdayName(currentDate.weekday)];
-    // todayEdt:
-    // {
-    //     "8:30 - 10:20": "Histoire-géographie - PRUNIER",
-    //     "10:20 - 10:40": "Pause",
-    //     "10:40 - 12:30": "Mathématiques - MIGOT",
-    //     "12:30 - 13:30": "Pause déjeuner",
-    //     "13:30 - 14:25": "Espagnol LV2 - BARREIRO"
-    // }
 
-    let nextClass = "";
-    let nextClassTime = "";
-    let nextClassFound = false;
-    for (let time in todayEdt) {
-        let timeSplit = time.split(" - ");
-        let hour = parseInt(timeSplit[0].split(":")[0]);
-        let minute = parseInt(timeSplit[0].split(":")[1]);
-        let second = currentDate.second;
-        if (hour > currentDate.hour || (hour == currentDate.hour && minute > currentDate.minute) || (hour == currentDate.hour && minute == currentDate.minute && second > currentDate.second)) {
-            nextClass = todayEdt[time];
+    let nextClass = false;
+    let nextClassTime = false;
+    for (let classInfo of todayEdt) {
+        let time = classInfo.time.split(" - ");
+        let start = time[0].split(":");
+        let end = time[1].split(":");
+        if (currentDate.hour < start[0] || (currentDate.hour == start[0] && currentDate.minute < start[1])) {
+            nextClass = classInfo.course;
             nextClassTime = time;
-            nextClassFound = true;
             break;
         }
     }
-    if (nextClassFound) {
-        return {
-            nextClass: nextClass,
-            nextClassTime: nextClassTime
-        }
-    }
-    else {
-        return {
-            nextClass: false,
-            nextClassTime: false
-        }
+    return {
+        nextClass: nextClass,
+        nextClassTime: nextClassTime
     }
 }
-
 
 async function getCurrentClass() {
     let currentDate = getCurrentDate();
-    let json = await readJSON();
+    let json = data
 
     if (!isThereClass()) {
         return {
             currentClass: false,
-            currentClassTime: false,
-            currentClassProgression: false,
-            remainingTime: false,
+            currentClassTime: false
         }
     }
 
     let todayEdt = json[getWeekdayName(currentDate.weekday)];
-    // todayEdt:
-    // {
-    //     "8:30 - 10:20": "Histoire-géographie - PRUNIER",
-    //     "10:20 - 10:40": "Pause",
-    //     "10:40 - 12:30": "Mathématiques - MIGOT",
-    //     "12:30 - 13:30": "Pause déjeuner",
-    //     "13:30 - 14:25": "Espagnol LV2 - BARREIRO"
-    // }
-
-    let currentClass = "";
-    let currentClassTime = "";
-    let currentClassFound = false;
-    let currentClassProgression = 0;
-    let remainingTime = 0;
-    for (let time in todayEdt) {
-        let timeSplit = time.split(" - ");
-        let hourMin = parseInt(timeSplit[0].split(":")[0]);
-        let minuteMin = parseInt(timeSplit[0].split(":")[1]);
-        let hourMax = parseInt(timeSplit[1].split(":")[0]);
-        let minuteMax = parseInt(timeSplit[1].split(":")[1]);
-        let second = currentDate.second;
-        if (hourMin < currentDate.hour && currentDate.hour < hourMax && ((minuteMin < currentDate.minute && currentDate.minute < minuteMax) || (currentDate.hour != hourMin && currentDate.hour != hourMax)) && second >= currentDate.second) {
-            currentClass = todayEdt[time];
+    let currentClass = false;
+    let currentClassTime = false;
+    let remainingTime = false;
+    for (let classInfo of todayEdt) {
+        let time = classInfo.time.split(" - ");
+        let start = time[0].split(":");
+        let end = time[1].split(":");
+        if ((start[0] == currentDate.hour && start[1] <= currentDate.minute) || (start[0] < currentDate.hour && currentDate.hour < end[0]) || (currentDate.hour == end[0] && currentDate.minute < end[1])) {
+            currentClass = classInfo.course;
             currentClassTime = time;
-            currentClassFound = true;
-            currentClassProgression = ((currentDate.hour - hourMin) * 60 + (currentDate.minute - minuteMin)) / ((hourMax - hourMin) * 60 + (minuteMax - minuteMin)) * 100;
-            remainingTime = (hourMax - currentDate.hour) + ":" + (minuteMax - currentDate.minute) + ":" + (60 - currentDate.second);
             break;
         }
     }
-
-    if (currentClassFound) {
-        return {
-            currentClass: currentClass,
-            currentClassTime: currentClassTime,
-            currentClassProgression: currentClassProgression,
-            remainingTime: remainingTime
-        }
+    return {
+        currentClass: currentClass,
+        currentClassTime: currentClassTime,
     }
-    else {
-        return {
-            currentClass: false,
-            currentClassTime: false,
-            currentClassProgression: false,
-            remainingTime: false,
-        }
-    }
-
 }
 
-
-function display() {
-    getCurrentClass().then((currentClass) => {
-        getNextClass().then((nextClass) => {
-            console.log(currentClass);
-            console.log(nextClass);
-            if (!currentClass.currentClass) {
-                currentClass.currentClass = "Pas de cours en ce moment";
-                currentClass.remainingTime = "00:00:00";
-                currentClass.currentClassProgression = 100;
-            }
-
-            if (!nextClass.nextClass) {
-                nextClass = {
-                    nextClass: "Pas de prochain cours",
-                    nextClassTime: ""
-                };
-            }
-            document.getElementById("currentClass").innerHTML = currentClass.currentClass;
-            document.getElementById("time-remaining").innerHTML = currentClass.remainingTime || "00:00:00";
-            document.getElementById("event").innerHTML = nextClass.nextClass;
-            document.getElementById("progress-bar-inner").style.width = currentClass.currentClassProgression + "%";
-            document.getElementById("progress-bar-inner").innerHTML = Number((currentClass.currentClassProgression).toFixed(3)) + "%";
-        })
-    })
-
+function getRemainingTime(classTime) {
+    let currentDate = getCurrentDate();
+    let classTimeArray = classTime.split(":");
+    let classHour = parseInt(classTimeArray[0]);
+    let classMinute = parseInt(classTimeArray[1]);
+    let remainingHour = classHour - currentDate.hour;
+    let remainingMinute = classMinute - currentDate.minute;
+    let remainingSecond = 60 - currentDate.second;
+    let remainingMiliseconds = 1000 - currentDate.miliseconds;
+    let remainingTime = (remainingHour * 3600000) + (remainingMinute * 60000) + (remainingSecond * 1000) + remainingMiliseconds;
+    // calculate remaining time in miliseconds
+    return remainingTime;
 }
 
-setInterval(display, 30);
+function percentageOfTheClassCalculator(classTimeFull) {
+    let classTimeEnd = classTimeFull[1].split(":")
+    let classTime = classTimeFull[0].split(":")
+    let classHour = classTime[0]
+    let classMinute = classTime[1]
+    let currentTimeVar = getCurrentDate()
+    let currentHour = currentTimeVar.hour
+    let currentMinute = currentTimeVar.minute
+    let currentSecond = currentTimeVar.second
+    let currentMilisecond = currentTimeVar.miliseconds
+    let elapsedHour = currentHour - classHour
+    let elapsedMinute = currentMinute - classMinute;
+    let elapsedTime = (elapsedHour * 3600) + (elapsedMinute * 60) + currentSecond + (currentMilisecond / 1000);
+
+    let classEndHour = parseInt(classTimeEnd[0]);
+    let classEndMinute = parseInt(classTimeEnd[1]);
+    let classDurationHour = classEndHour - classHour;
+    let classDurationMinute = classEndMinute - classMinute;
+    let classDuration = (classDurationHour * 3600) + (classDurationMinute * 60);
+
+    let percentageElapsed = (elapsedTime / classDuration) * 100;
+    return percentageElapsed;
+}
+
+async function display() {
+    getNextClass().then((nextClassInfo) => {
+        getCurrentClass().then((currentClassInfo) => {
+            if (currentClassInfo.currentClass == false && nextClassInfo.nextClass == false) {
+                document.getElementById("currentClass").innerHTML = "LIBERTÉ 🎉";
+                document.getElementById("time-remaining").innerHTML = "LIBERTÉ 🎉";
+                document.getElementById("progress-bar-inner").style.width = "100%";
+                document.getElementById("progress-bar-inner").innerHTML = "100%";
+                document.getElementById("event").innerHTML = "LIBERTÉ 🎉";
+                return;
+            }
+            let nextClass = nextClassInfo.nextClass;
+            let nextClassTime = nextClassInfo.nextClassTime;
+            let currentClass = currentClassInfo.currentClass;
+            let currentClassTime = currentClassInfo.currentClassTime;
+            let remainingTime = getRemainingTime(currentClassTime[1]);
+            let remainingTimeFormatted = new Date(remainingTime).toISOString().substr(11, 8);
+            let percentageOfTheClass = percentageOfTheClassCalculator(currentClassInfo.currentClassTime)
+            document.getElementById("currentClass").innerHTML = currentClass;
+            document.getElementById("time-remaining").innerHTML = remainingTimeFormatted;
+            document.getElementById("progress-bar-inner").style.width = percentageOfTheClass + "%";
+            document.getElementById("progress-bar-inner").innerHTML = Number(percentageOfTheClass).toFixed(3) + "%";
+            if (nextClass == false) {
+                document.getElementById("event").innerHTML = "LIBERTÉ 🎉";
+                return;
+            }
+            document.getElementById("event").innerHTML = nextClass + " de " + nextClassTime[0] + " à " + nextClassTime[1];
+        });
+    });
+}
+// display();
+
+
+
+setInterval(() => {
+    display();
+}, 30);
 
 
 

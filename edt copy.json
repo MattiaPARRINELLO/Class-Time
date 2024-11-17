@@ -1,0 +1,136 @@
+{
+  "lundi": [
+    {
+      "time": "8:30 - 10:20",
+      "course": "Pas cours"
+    },
+    {
+      "time": "10:20 - 10:40",
+      "course": "Pause"
+    },
+    {
+      "time": "10:40 - 11:35",
+      "course": "Enseignement scientifique - NEGRONI"
+    },
+    {
+      "time": "11:35 - 12:30",
+      "course": "Enseignement scientifique - MSELLAK"
+    },
+    {
+      "time": "12:30 - 13:30",
+      "course": "Pause déjeuner"
+    },
+    {
+      "time": "13:30 - 14:25",
+      "course": "Anglais LV1 - ZIMMERMANN"
+    },
+    {
+      "time": "14:25 - 15:20",
+      "course": "Mathématiques - MIGOT"
+    },
+    {
+      "time": "15:20 - 15:35",
+      "course": "Pause"
+    },
+    {
+      "time": "15:35 - 16:30",
+      "course": "Mathématiques - MIGOT"
+    }
+  ],
+  "mardi": [
+    {
+      "time": "8:30 - 10:20",
+      "course": "Mathématiques - MIGOT"
+    },
+    {
+      "time": "10:20 - 10:40",
+      "course": "Pause"
+    },
+    {
+      "time": "10:40 - 12:30",
+      "course": "Philosophie - DRECQ"
+    },
+    {
+      "time": "12:30 - 13:30",
+      "course": "Pause déjeuner"
+    },
+    {
+      "time": "13:30 - 14:25",
+      "course": "Anglais LV1 - ZIMMERMANN"
+    },
+    {
+      "time": "14:25 - 15:20",
+      "course": "Espagnol LV2 - BARREIRO"
+    },
+    {
+      "time": "15:20 - 15:35",
+      "course": "Pause"
+    },
+    {
+      "time": "15:35 - 17:00",
+      "course": "Sport - GIROTTO"
+    }
+  ],
+  "mercredi": [
+    {
+      "time": "8:00 - 11:35",
+      "course": "Numérique et sciences informatiques - HAMIZI"
+    },
+    {
+      "time": "11:35 - 13:30",
+      "course": "Pause déjeuner"
+    },
+    {
+      "time": "13:30 - 14:25",
+      "course": "Anglais LV1 - ZIMMERMANN"
+    },
+    {
+      "time": "14:25 - 15:20",
+      "course": "Histoire-géographie - PRUNIER"
+    },
+    {
+      "time": "15:35 - 17:00",
+      "course": "Philosophie - DRECQ"
+    }
+  ],
+  "jeudi": [
+    {
+      "time": "8:00 - 11:35",
+      "course": "Numérique et sciences informatiques - HAMIZI"
+    },
+    {
+      "time": "11:35 - 12:30",
+      "course": "Enseignement moral et civique - PRUNIER ou Philosophie - DRECQ"
+    },
+    {
+      "time": "12:30 - 13:30",
+      "course": "Pause déjeuner"
+    },
+    {
+      "time": "13:30 - 14:25",
+      "course": "Accompagnement orientation - PAINEAU / PRÉVOT"
+    }
+  ],
+  "vendredi": [
+    {
+      "time": "8:30 - 10:20",
+      "course": "Histoire-géographie - PRUNIER"
+    },
+    {
+      "time": "10:20 - 10:40",
+      "course": "Pause"
+    },
+    {
+      "time": "10:40 - 12:30",
+      "course": "Mathématiques - MIGOT"
+    },
+    {
+      "time": "12:30 - 13:30",
+      "course": "Pause déjeuner"
+    },
+    {
+      "time": "13:30 - 14:25",
+      "course": "Espagnol LV2 - BARREIRO"
+    }
+  ]
+}
