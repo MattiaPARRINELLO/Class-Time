@@ -158,9 +158,9 @@ def displayAll():
 
 displayAll()
 
-# while True:
-#     displayAll()
-#     time.sleep(30 / 1000)
+while True:
+    displayAll()
+    time.sleep(30 / 1000)
 
 
 
