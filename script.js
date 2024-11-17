@@ -42,7 +42,9 @@ async function getNextClass() {
     for (let classInfo of todayEdt) {
         let classTime = classInfo.time.split(" - ");
         let classStart = classTime[0].split(":");
-        if (currentDate.hour < classStart[0] || (currentDate.hour == classStart[0] && currentDate.minute < classStart[1])) {
+        let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1], 0, 0);
+        let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
+        if (currentTimestamp < classStartTimestamp) {
             nextClass = classInfo.course;
             nextClassTime = classTime;
             break;
@@ -72,7 +74,10 @@ async function getCurrentClass() {
         let classTime = classInfo.time.split(" - ");
         let classStart = classTime[0].split(":");
         let classEnd = classTime[1].split(":");
-        if ((classStart[0] == currentDate.hour && classStart[1] <= currentDate.minute) || (classStart[0] < currentDate.hour && currentDate.hour < classEnd[0]) || (currentDate.hour == classEnd[0] && currentDate.minute < classEnd[1])) {
+        let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1], 0, 0);
+        let classEndTimestamp = new Date(0, 0, 0, classEnd[0], classEnd[1], 0, 0);
+        let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
+        if (currentTimestamp >= classStartTimestamp && currentTimestamp <= classEndTimestamp) {
             currentClass = classInfo.course;
             currentClassTime = classTime;
             break;
@@ -98,19 +103,20 @@ function getRemainingTime(classTime) {
     return remainingTime;
 }
 
-function percentageOfTheClassCalculator(classTimeFull) {
+function percentageAndRemaining(classTimeFull) {
     let classTimeEnd = classTimeFull[1].split(":")
     let classTime = classTimeFull[0].split(":")
-    let classStartHour = classTime[0]
-    let classStartMinute = classTime[1]
-    let currentTime = getCurrentDate()
-    let elapsedTime = ((currentTime.hour - classStartHour) * 3600) + ((currentTime.minute - classStartMinute) * 60) + currentTime.second * 1000 + currentTime.miliseconds
-
-    let classEndHour = parseInt(classTimeEnd[0]);
-    let classEndMinute = parseInt(classTimeEnd[1]);
-    let classDuration = ((classEndHour - classStartHour) * 3600) + (classEndMinute - classStartMinute * 60);
-
-    return (elapsedTime / classDuration) * 100;
+    let classStartTimestamp = new Date(0, 0, 0, classTime[0], classTime[1], 0, 0);
+    let classEndTimestamp = new Date(0, 0, 0, classTimeEnd[0], classTimeEnd[1], 0, 0);
+    let currentDate = getCurrentDate();
+    let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, currentDate.second, currentDate.miliseconds);
+    let percentageOfTheClass = ((currentTimestamp - classStartTimestamp) / (classEndTimestamp - classStartTimestamp)) * 100;
+    let remainingTime = classEndTimestamp - currentTimestamp;
+    remainingTime = new Date(remainingTime).toISOString().substr(11, 8);
+    return {
+        percentageOfTheClass: percentageOfTheClass,
+        remainingTime: remainingTime
+    }
 }
 
 async function display() {
@@ -128,13 +134,11 @@ async function display() {
             let nextClassTime = nextClassInfo.nextClassTime;
             let currentClass = currentClassInfo.currentClass;
             let currentClassTime = currentClassInfo.currentClassTime;
-            let remainingTime = getRemainingTime(currentClassTime[1]);
-            let remainingTimeFormatted = new Date(remainingTime).toISOString().substr(11, 8);
-            let percentageOfTheClass = percentageOfTheClassCalculator(currentClassInfo.currentClassTime)
+            let percentAndRemaining = percentageAndRemaining(currentClassTime);
             document.getElementById("currentClass").innerHTML = currentClass;
-            document.getElementById("time-remaining").innerHTML = remainingTimeFormatted;
-            document.getElementById("progress-bar-inner").style.width = percentageOfTheClass + "%";
-            document.getElementById("progress-bar-inner").innerHTML = Number(percentageOfTheClass).toFixed(3) + "%";
+            document.getElementById("time-remaining").innerHTML = percentAndRemaining.remainingTime;
+            document.getElementById("progress-bar-inner").style.width = percentAndRemaining.percentageOfTheClass + "%";
+            document.getElementById("progress-bar-inner").innerHTML = Number(percentAndRemaining.percentageOfTheClass).toFixed(3) + "%";
             if (nextClass == false) {
                 document.getElementById("event").innerHTML = "LIBERTÉ 🎉";
                 return;
