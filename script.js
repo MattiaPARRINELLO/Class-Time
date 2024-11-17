@@ -7,25 +7,15 @@ async function readJSON() {
     let json = await response.json();
     return json;
 }
-
 function getCurrentDate() {
-    let day = new Date().getDate();
-    let weekday = new Date().getDay();
-    let hour = new Date().getHours();
-    let minute = new Date().getMinutes();
-    let second = new Date().getSeconds();
-    let miliseconds = new Date().getMilliseconds();
     return {
-        day: day,
-        weekday: weekday,
-        hour: hour,
-        minute: minute,
-        second: second,
-        miliseconds: miliseconds
+        weekday: new Date().getDay(),
+        hour: new Date().getHours(),
+        minute: new Date().getMinutes(),
+        second: new Date().getSeconds(),
+        miliseconds: new Date().getMilliseconds()
     }
 }
-
-
 function isThereClass() {
     let currentDate = getCurrentDate();
     return !(currentDate.hour < 8 || currentDate.hour > 18 || currentDate.weekday == 6 || currentDate.weekday == 0);
@@ -50,12 +40,11 @@ async function getNextClass() {
     let nextClass = false;
     let nextClassTime = false;
     for (let classInfo of todayEdt) {
-        let time = classInfo.time.split(" - ");
-        let start = time[0].split(":");
-        let end = time[1].split(":");
-        if (currentDate.hour < start[0] || (currentDate.hour == start[0] && currentDate.minute < start[1])) {
+        let classTime = classInfo.time.split(" - ");
+        let classStart = classTime[0].split(":");
+        if (currentDate.hour < classStart[0] || (currentDate.hour == classStart[0] && currentDate.minute < classStart[1])) {
             nextClass = classInfo.course;
-            nextClassTime = time;
+            nextClassTime = classTime;
             break;
         }
     }
@@ -79,14 +68,13 @@ async function getCurrentClass() {
     let todayEdt = json[getWeekdayName(currentDate.weekday)];
     let currentClass = false;
     let currentClassTime = false;
-    let remainingTime = false;
     for (let classInfo of todayEdt) {
-        let time = classInfo.time.split(" - ");
-        let start = time[0].split(":");
-        let end = time[1].split(":");
-        if ((start[0] == currentDate.hour && start[1] <= currentDate.minute) || (start[0] < currentDate.hour && currentDate.hour < end[0]) || (currentDate.hour == end[0] && currentDate.minute < end[1])) {
+        let classTime = classInfo.time.split(" - ");
+        let classStart = classTime[0].split(":");
+        let classEnd = classTime[1].split(":");
+        if ((classStart[0] == currentDate.hour && classStart[1] <= currentDate.minute) || (classStart[0] < currentDate.hour && currentDate.hour < classEnd[0]) || (currentDate.hour == classEnd[0] && currentDate.minute < classEnd[1])) {
             currentClass = classInfo.course;
-            currentClassTime = time;
+            currentClassTime = classTime;
             break;
         }
     }
@@ -113,25 +101,16 @@ function getRemainingTime(classTime) {
 function percentageOfTheClassCalculator(classTimeFull) {
     let classTimeEnd = classTimeFull[1].split(":")
     let classTime = classTimeFull[0].split(":")
-    let classHour = classTime[0]
-    let classMinute = classTime[1]
-    let currentTimeVar = getCurrentDate()
-    let currentHour = currentTimeVar.hour
-    let currentMinute = currentTimeVar.minute
-    let currentSecond = currentTimeVar.second
-    let currentMilisecond = currentTimeVar.miliseconds
-    let elapsedHour = currentHour - classHour
-    let elapsedMinute = currentMinute - classMinute;
-    let elapsedTime = (elapsedHour * 3600) + (elapsedMinute * 60) + currentSecond + (currentMilisecond / 1000);
+    let classStartHour = classTime[0]
+    let classStartMinute = classTime[1]
+    let currentTime = getCurrentDate()
+    let elapsedTime = ((currentTime.hour - classStartHour) * 3600) + ((currentTime.minute - classStartMinute) * 60) + currentTime.second * 1000 + currentTime.miliseconds
 
     let classEndHour = parseInt(classTimeEnd[0]);
     let classEndMinute = parseInt(classTimeEnd[1]);
-    let classDurationHour = classEndHour - classHour;
-    let classDurationMinute = classEndMinute - classMinute;
-    let classDuration = (classDurationHour * 3600) + (classDurationMinute * 60);
+    let classDuration = ((classEndHour - classStartHour) * 3600) + (classEndMinute - classStartMinute * 60);
 
-    let percentageElapsed = (elapsedTime / classDuration) * 100;
-    return percentageElapsed;
+    return (elapsedTime / classDuration) * 100;
 }
 
 async function display() {

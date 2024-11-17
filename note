@@ -1,0 +1,5 @@
+pourcentages et temps restant étaient mal calculé, ils ne sont pas corrigé pour le js mais le pourcentage est corrigé pour le python, 
+revoir recherche de cours en cours, 
+ainsi que calcul du temps restant et pourcentage, 
+trouver un moyen d'utiliser des timesstamp pour js, 
+et fusionner les fonctions pourcentage et temps restant (basiquement même calcul)
