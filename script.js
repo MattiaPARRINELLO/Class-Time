@@ -2,12 +2,28 @@ let data = []
 readJSON().then((json) => {
     data = json;
 });
+
+
+const debug = true
+const runLoop = true
+
+
 async function readJSON() {
     let response = await fetch('./edt copy.json');
     let json = await response.json();
     return json;
 }
+
 function getCurrentDate() {
+    if (debug) {
+        return {
+            weekday: 1,
+            hour: 15,
+            minute: 20,
+            second: new Date().getSeconds(),
+            miliseconds: new Date().getMilliseconds()
+        }
+    }
     return {
         weekday: new Date().getDay(),
         hour: new Date().getHours(),
@@ -16,10 +32,12 @@ function getCurrentDate() {
         miliseconds: new Date().getMilliseconds()
     }
 }
+
 function isThereClass() {
     let currentDate = getCurrentDate();
     return !(currentDate.hour < 8 || currentDate.hour > 18 || currentDate.weekday == 6 || currentDate.weekday == 0);
 }
+
 function getWeekdayName(weekday) {
     let weekdayName = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
     return weekdayName[weekday - 1];
@@ -77,7 +95,7 @@ async function getCurrentClass() {
         let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1], 0, 0);
         let classEndTimestamp = new Date(0, 0, 0, classEnd[0], classEnd[1], 0, 0);
         let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
-        if (currentTimestamp >= classStartTimestamp && currentTimestamp <= classEndTimestamp) {
+        if (currentTimestamp <= classStartTimestamp && currentTimestamp < classEndTimestamp) {
             currentClass = classInfo.course;
             currentClassTime = classTime;
             break;
@@ -112,7 +130,7 @@ function percentageAndRemaining(classTimeFull) {
     let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, currentDate.second, currentDate.miliseconds);
     let percentageOfTheClass = ((currentTimestamp - classStartTimestamp) / (classEndTimestamp - classStartTimestamp)) * 100;
     let remainingTime = classEndTimestamp - currentTimestamp;
-    remainingTime = new Date(remainingTime).toISOString().substr(11, 8);
+    remainingTime = new Date(remainingTime).toISOString().slice(11, 19);
     return {
         percentageOfTheClass: percentageOfTheClass,
         remainingTime: remainingTime
@@ -122,7 +140,7 @@ function percentageAndRemaining(classTimeFull) {
 async function display() {
     getNextClass().then((nextClassInfo) => {
         getCurrentClass().then((currentClassInfo) => {
-            if (currentClassInfo.currentClass == false && nextClassInfo.nextClass == false) {
+            if (!currentClassInfo.currentClass && !nextClassInfo.nextClass) {
                 document.getElementById("currentClass").innerHTML = "LIBERTÉ 🎉";
                 document.getElementById("time-remaining").innerHTML = "LIBERTÉ 🎉";
                 document.getElementById("progress-bar-inner").style.width = "100%";
@@ -139,7 +157,7 @@ async function display() {
             document.getElementById("time-remaining").innerHTML = percentAndRemaining.remainingTime;
             document.getElementById("progress-bar-inner").style.width = percentAndRemaining.percentageOfTheClass + "%";
             document.getElementById("progress-bar-inner").innerHTML = Number(percentAndRemaining.percentageOfTheClass).toFixed(3) + "%";
-            if (nextClass == false) {
+            if (!nextClass) {
                 document.getElementById("event").innerHTML = "LIBERTÉ 🎉";
                 return;
             }
@@ -147,13 +165,12 @@ async function display() {
         });
     });
 }
-// display();
 
 
-
-setInterval(() => {
-    display();
-}, 30);
+display();
+if (runLoop) {
+    setInterval(display, 30);
+}
 
 
 

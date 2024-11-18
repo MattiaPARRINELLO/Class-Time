@@ -2,7 +2,10 @@ import json
 import datetime
 from art import *
 import time
-# import _strptime
+
+debug = False
+runLoop = True
+
 
 edt ={}
 with open('edt copy.json', 'r') as f:
@@ -13,18 +16,25 @@ with open('edt copy.json', 'r') as f:
 
 def getCurrentDate():
     now = datetime.datetime.now()
+    if debug:
+        return {
+            'weekday': 0,
+            'hour': 15,
+            'minute': 20,
+            'second': now.second,
+            'millisecond': now.microsecond
+        }
+    
     return {
         'weekday': now.weekday(),
         'hour': now.hour,
         'minute': now.minute,
         'second': now.second,
-        'millisecond': now.microsecond
     }
 
 def isThereClass() :
     currentDate = getCurrentDate()
     return not (currentDate['hour'] < 8 or currentDate['hour'] > 18 or currentDate['weekday'] == 5 or currentDate['weekday'] == 6)
-
 
 def getWeekDayName(weekday):
     return {
@@ -81,8 +91,7 @@ def getCurrentClass():
         classStartTimestamp = datetime.datetime.strptime(classTime[0], "%H:%M")
         classEndTimestamp = datetime.datetime.strptime(classTime[1], "%H:%M")
         currentTimeTimestamp = datetime.datetime.strptime((str(currentDate['hour']) + ":" + str(currentDate['minute'])),"%H:%M")
-
-        if classStartTimestamp <= currentTimeTimestamp and currentTimeTimestamp <= classEndTimestamp:
+        if classStartTimestamp <= currentTimeTimestamp and currentTimeTimestamp < classEndTimestamp:
             getCurrentClass = classInfo['course']
             getCurrentClassTime = classTime
             break
@@ -90,7 +99,6 @@ def getCurrentClass():
         'currentClass': getCurrentClass,
         'currentClassTime': getCurrentClassTime
     }
-
 
 def percentageAndRemainingTime(classTimeFull):
     classTimeEnd = classTimeFull[1].split(':')
@@ -114,9 +122,6 @@ def percentageAndRemainingTime(classTimeFull):
         'percentage': (elapsedTime / classDuration) * 100,
         'remainingTime': formatted_remaining_time
     }
-
-
-        
 
 def clearScreen():
     print("\033[H\033[J")
@@ -156,9 +161,9 @@ def displayAll():
         print('Prochain cours : LIBERTÉ 🎉')
 
 
-displayAll()
 
-while True:
+displayAll()
+while runLoop:
     displayAll()
     time.sleep(30 / 1000)
 
