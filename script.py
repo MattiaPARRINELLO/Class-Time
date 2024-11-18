@@ -3,7 +3,7 @@ import datetime
 from art import *
 import time
 
-debug = True
+debug = False
 runLoop = True
 
 
@@ -89,7 +89,9 @@ def getCurrentClass():
     for classInfo in todayEdt:
         classTime = classInfo['time'].split(' - ')
         classStartTimestamp = datetime.datetime.strptime(classTime[0], "%H:%M")
+        classStartTimestamp -= datetime.timedelta(minutes=2)
         classEndTimestamp = datetime.datetime.strptime(classTime[1], "%H:%M")
+        classEndTimestamp -= datetime.timedelta(minutes=2)
         currentTimeTimestamp = datetime.datetime.strptime((str(currentDate['hour']) + ":" + str(currentDate['minute'])),"%H:%M")
         if classStartTimestamp <= currentTimeTimestamp and currentTimeTimestamp < classEndTimestamp:
             getCurrentClass = classInfo['course']
@@ -107,8 +109,8 @@ def percentageAndRemainingTime(classTimeFull):
     classStartMinute = int(classTime[1])
     classEndMinute = int(classTimeEnd[1])
     classEndHour = int(classTimeEnd[0])
-    classStartTimeStamp = datetime.datetime.strptime((str(classStartHour) + ":" + str(classStartMinute)), "%H:%M")
-    classEndTimeStamp = datetime.datetime.strptime((str(classEndHour) + ":" + str(classEndMinute)), "%H:%M")
+    classStartTimeStamp = datetime.datetime.strptime((str(classStartHour) + ":" + str(classStartMinute-2)), "%H:%M")
+    classEndTimeStamp = datetime.datetime.strptime((str(classEndHour) + ":" + str(classEndMinute-2)), "%H:%M")
     currentTime = getCurrentDate()
     currentTimeFormat = datetime.datetime.strptime((str(currentTime['hour']) + ":" + str(currentTime['minute']) + ":" + str(currentTime['second']) + "." + str(currentTime['millisecond'])), "%H:%M:%S.%f")
     elapsedTime = currentTimeFormat - classStartTimeStamp

@@ -4,7 +4,7 @@ readJSON().then((json) => {
 });
 
 
-const debug = true
+const debug = false
 const runLoop = true
 
 
@@ -92,8 +92,8 @@ async function getCurrentClass() {
         let classTime = classInfo.time.split(" - ");
         let classStart = classTime[0].split(":");
         let classEnd = classTime[1].split(":");
-        let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1], 0, 0);
-        let classEndTimestamp = new Date(0, 0, 0, classEnd[0], classEnd[1], 0, 0);
+        let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1] - 2, 0, 0);
+        let classEndTimestamp = new Date(0, 0, 0, classEnd[0], classEnd[1] - 2, 0, 0);
         let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
         if (currentTimestamp <= classStartTimestamp && currentTimestamp < classEndTimestamp) {
             currentClass = classInfo.course;
@@ -124,8 +124,8 @@ function getRemainingTime(classTime) {
 function percentageAndRemaining(classTimeFull) {
     let classTimeEnd = classTimeFull[1].split(":")
     let classTime = classTimeFull[0].split(":")
-    let classStartTimestamp = new Date(0, 0, 0, classTime[0], classTime[1], 0, 0);
-    let classEndTimestamp = new Date(0, 0, 0, classTimeEnd[0], classTimeEnd[1], 0, 0);
+    let classStartTimestamp = new Date(0, 0, 0, classTime[0], classTime[1] - 2, 0, 0);
+    let classEndTimestamp = new Date(0, 0, 0, classTimeEnd[0], classTimeEnd[1] - 2, 0, 0);
     let currentDate = getCurrentDate();
     let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, currentDate.second, currentDate.miliseconds);
     let percentageOfTheClass = ((currentTimestamp - classStartTimestamp) / (classEndTimestamp - classStartTimestamp)) * 100;
