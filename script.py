@@ -3,7 +3,7 @@ import datetime
 from art import *
 import time
 
-debug = False
+debug = True
 runLoop = True
 
 
@@ -165,7 +165,7 @@ def displayAll():
 displayAll()
 while runLoop:
     displayAll()
-    time.sleep(30 / 1000)
+    time.sleep(50/1000)
 
 
 

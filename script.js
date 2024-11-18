@@ -167,9 +167,8 @@ async function display() {
 }
 
 
-display();
 if (runLoop) {
-    setInterval(display, 30);
+    setInterval(display, (10));
 }
 
 
