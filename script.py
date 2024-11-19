@@ -30,6 +30,7 @@ def getCurrentDate():
         'hour': now.hour,
         'minute': now.minute,
         'second': now.second,
+        'millisecond': now.microsecond
     }
 
 def isThereClass() :
