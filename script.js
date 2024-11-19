@@ -95,7 +95,7 @@ async function getCurrentClass() {
         let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1] - 2, 0, 0);
         let classEndTimestamp = new Date(0, 0, 0, classEnd[0], classEnd[1] - 2, 0, 0);
         let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
-        if (currentTimestamp <= classStartTimestamp && currentTimestamp < classEndTimestamp) {
+        if (currentTimestamp >= classStartTimestamp && currentTimestamp <= classEndTimestamp) {
             currentClass = classInfo.course;
             currentClassTime = classTime;
             break;
