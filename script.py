@@ -63,6 +63,7 @@ def getNextClass():
     for classInfo in todayEdt:
         classTime = classInfo['time'].split(' - ')
         classStartTimestamp = datetime.datetime.strptime(classTime[0], "%H:%M")
+        classStartTimestamp -= datetime.timedelta(minutes=2)
         currentTimeTimestamp = datetime.datetime.strptime((str(currentDate['hour']) + ":" + str(currentDate['minute'])),"%H:%M")
         if currentTimeTimestamp < classStartTimestamp:
             nextClass = classInfo['course']
