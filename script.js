@@ -60,7 +60,7 @@ async function getNextClass() {
     for (let classInfo of todayEdt) {
         let classTime = classInfo.time.split(" - ");
         let classStart = classTime[0].split(":");
-        let classStartTimestamp = new Date(0, 0, 0, classStart[0] - 2, classStart[1], 0, 0);
+        let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1] - 2, 0, 0);
         let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
         if (currentTimestamp < classStartTimestamp) {
             nextClass = classInfo.course;
