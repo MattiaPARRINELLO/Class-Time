@@ -61,7 +61,7 @@ async function getNextClass() {
         let classTime = classInfo.time.split(" - ");
         let classStart = classTime[0].split(":");
         let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1] - 2, 0, 0);
-        let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
+        let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, currentDate.second, 0);
         if (currentTimestamp < classStartTimestamp) {
             nextClass = classInfo.course;
             nextClassTime = classTime;
@@ -94,7 +94,7 @@ async function getCurrentClass() {
         let classEnd = classTime[1].split(":");
         let classStartTimestamp = new Date(0, 0, 0, classStart[0], classStart[1] - 2, 0, 0);
         let classEndTimestamp = new Date(0, 0, 0, classEnd[0], classEnd[1] - 2, 0, 0);
-        let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, 0, 0);
+        let currentTimestamp = new Date(0, 0, 0, currentDate.hour, currentDate.minute, currentDate.second, 0);
         if (currentTimestamp >= classStartTimestamp && currentTimestamp < classEndTimestamp) {
             currentClass = classInfo.course;
             currentClassTime = classTime;
