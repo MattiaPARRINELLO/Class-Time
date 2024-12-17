@@ -28,7 +28,7 @@ function getCurrentDate() {
         weekday: new Date().getDay(),
         hour: new Date().getHours(),
         minute: new Date().getMinutes(),
-        second: new Date().getSeconds() - 34,
+        second: new Date().getSeconds() - 32,
         miliseconds: new Date().getMilliseconds()
     }
 }
