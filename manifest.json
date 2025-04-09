@@ -1,0 +1,8 @@
+{
+  "project_name": "Class Time",
+  "project_description": "Ce site web permet simplement d'afficher l'avancement du cours en cours et le prochain cours qui viens avec. On peut synchroniser le site a la miliseconde pres pour être synchroniser avec la sonnerie de l'école.",
+  "github_link": "https://github.com/MattiaPARRINELLO/Class-Time",
+  "live_demo": "files/class-time",
+  "project_image": "files/class-time/logo.png",
+  "project_date": "29/11/2024"
+}
